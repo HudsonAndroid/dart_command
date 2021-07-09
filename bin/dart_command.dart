@@ -1,25 +1,25 @@
 import 'dart:io';
 
-import 'package:dart_command/dart_command.dart';
 import 'package:dio/dio.dart';
 import 'package:process_run/shell.dart';
 
 dynamic main(List<String> args) async {
   var shell = Shell();
-  shell.run('pwd');
-  shell.run('flutter pub get');
+  await shell.run('pwd');
+  // shell.run('flutter pub get');
 
   // moveFile(File('http://git.pupuvip.com:8005/frontend/flutter_plugins/plutter_scaffold/-/blob/master/android/app/build.gradle'), 'bin/build.gradle');
   // writeFile();
 
-  downloadFile();
+  await downloadFile();
   // var path = await _grabPlutterPath(shell);
   // print('路径是$path');
 
   // await File('${path}/files/build.gradle').copy('build.gradle');
   // copyAndModify('${path}/files/build.gradle', 'build.gradle', '名字', '修改后的名字');
 
-  print('>>${args.length}>>${sayHello(args[0])}');
+  print('完成');
+  // print('>>${args.length}>>${sayHello(args[0])}');
 }
 
 /// 获取Plutter原始所在路径，以备后面复制文件使用
@@ -41,6 +41,7 @@ Future<String> _grabPlutterPath(Shell shell) async {
 }
 
 void downloadFile() async {
+  print('开始下载文件');
   var dio = Dio();
 
   var response = await dio.request(
