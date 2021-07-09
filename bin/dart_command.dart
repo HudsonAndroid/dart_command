@@ -6,6 +6,7 @@ import 'package:process_run/shell.dart';
 
 dynamic main(List<String> args) async {
   var shell = Shell();
+  shell.run('pwd');
   shell.run('flutter pub get');
 
   // moveFile(File('http://git.pupuvip.com:8005/frontend/flutter_plugins/plutter_scaffold/-/blob/master/android/app/build.gradle'), 'bin/build.gradle');
