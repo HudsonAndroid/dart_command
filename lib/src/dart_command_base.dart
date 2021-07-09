@@ -4,3 +4,7 @@
 class Awesome {
   bool get isAwesome => true;
 }
+
+sayHello(name) {
+  return 'hello >> $name';
+}

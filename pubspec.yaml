@@ -1,14 +1,19 @@
 name: dart_command
-description: A starting point for Dart libraries or applications.
-# version: 1.0.0
+description: dart command for process something.
+version: 0.0.1
 # homepage: https://www.example.com
 
 environment:
   sdk: '>=2.10.0 <3.0.0'
 
-#dependencies:
-#  path: ^1.7.0
+dependencies:
+  console: ^3.0.0
+  process_run: ^0.11.2+8
+  dio: ^3.0.10
 
 dev_dependencies:
   pedantic: ^1.9.0
   test: ^1.14.4
+
+executables:
+  dartCommand:
