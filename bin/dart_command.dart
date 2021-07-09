@@ -12,8 +12,9 @@ dynamic main(List<String> args) async {
   // moveFile(File('http://git.pupuvip.com:8005/frontend/flutter_plugins/plutter_scaffold/-/blob/master/android/app/build.gradle'), 'bin/build.gradle');
   // writeFile();
 
-  var path = await _grabPlutterPath(shell);
-  print('路径是$path');
+  downloadFile();
+  // var path = await _grabPlutterPath(shell);
+  // print('路径是$path');
 
   // await File('${path}/files/build.gradle').copy('build.gradle');
   // copyAndModify('${path}/files/build.gradle', 'build.gradle', '名字', '修改后的名字');
@@ -43,8 +44,9 @@ void downloadFile() async {
   var dio = Dio();
 
   var response = await dio.request(
-      'http://dartpub.pupuvip.com:4000/packages/plutter_scaffold/android/build.gradle');
+      'https://raw.githubusercontent.com/HudsonAndroid/dart_command/main/example/dart_command_example.dart');
   print('内容${response}');
+  writeFile('example.dart', response.data.toString());
 }
 
 /// 复制并修复文件内容
