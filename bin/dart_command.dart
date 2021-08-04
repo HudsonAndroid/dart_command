@@ -43,14 +43,10 @@ Future<String> _grabPlutterPath(Shell shell) async {
 void downloadFile() async {
   print('开始下载文件');
 
-  // print(await http.get(
-  //     'https://raw.githubusercontent.com/HudsonAndroid/dart_command/main/example/dart_command_example.dart'));
-
   var dio = Dio();
 
-  var response = await dio.download(
-      'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F8f736c32c26ba596a88d0fcab49667f2c662360727a30-cMBbHk_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1630640400&t=030964b45af2b3a249edcd8aa2f025f8',
-      'tmp.jpg');
+  var response =
+      await dio.download('http://127.0.0.1:8080/favicon.ico', 'tmp.jpg');
   print('内容${response}');
   // writeFile('example.jpg', response.data.toString());
 }
