@@ -4,6 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:process_run/shell.dart';
 
 dynamic main(List<String> args) async {
+  args?.forEach((element) {
+    print('内容${element}');
+  });
+
   var shell = Shell();
   await shell.run('pwd');
   // shell.run('flutter pub get');
