@@ -1,29 +1,43 @@
 import 'dart:io';
 
+import 'package:dart_command/const_var.dart';
+import 'package:dart_command/helper.dart';
+import 'package:dart_command/src/space_process/processor.dart';
 import 'package:dio/dio.dart';
 import 'package:process_run/shell.dart';
 
 dynamic main(List<String> args) async {
+  if (args.isEmpty) {
+    PlutterHelper().noteInvalidCommand();
+    return;
+  }
   args?.forEach((element) {
     print('内容${element}');
   });
 
-  var shell = Shell();
-  await shell.run('pwd');
-  // shell.run('flutter pub get');
 
-  // moveFile(File('http://git.pupuvip.com:8005/frontend/flutter_plugins/plutter_scaffold/-/blob/master/android/app/build.gradle'), 'bin/build.gradle');
-  // writeFile();
+  final type = args[0];
+  if (type == 'build') {
+    var shell = Shell();
+    await shell.run('Flutter pub get');
+    // 解析参数
+    if(args.length >= 2){
+      await SpaceProcessor().buildRunnableSpace(args[1]);
+    }else{
+      print('参数不正确');
+    }
+  }else if(type == 'clean') {
+    // 清空工作空间
+  }
 
-  await downloadFile();
-  // var path = await _grabPlutterPath(shell);
-  // print('路径是$path');
-
-  // await File('${path}/files/build.gradle').copy('build.gradle');
-  // copyAndModify('${path}/files/build.gradle', 'build.gradle', '名字', '修改后的名字');
-
-  print('完成');
-  // print('>>${args.length}>>${sayHello(args[0])}');
+  // var shell = Shell();
+  // await shell.run('pwd');
+  // // shell.run('flutter pub get');
+  //
+  // // moveFile(File('http://git.pupuvip.com:8005/frontend/flutter_plugins/plutter_scaffold/-/blob/master/android/app/build.gradle'), 'bin/build.gradle');
+  // // writeFile();
+  //
+  // await downloadFile();
 }
 
 /// 获取Plutter原始所在路径，以备后面复制文件使用
@@ -49,9 +63,20 @@ void downloadFile() async {
 
   var dio = Dio();
 
-  var response =
-      await dio.download('http://127.0.0.1:8080/favicon.ico', 'tmp.jpg');
-  print('内容${response}');
+  // try {
+  //   var response = await dio.download(
+  //       'https://raw.githubusercontent.com/HudsonAndroid/dart_command/main/example/dart_command_example.dart',
+  //       'tmp.jpg');
+  //   print('内容${response}');
+  // } on Exception catch (e) {
+  //   print('执行出错$e');
+  // }
+
+  final appBuildGradle = '.android/app/build.gradle';
+  print('地址${ConstVar.BASE_URL}${appBuildGradle}');
+  var result = await dio.get('${ConstVar.BASE_URL}${appBuildGradle}');
+
+  print('结果${result.toString().replaceAll('名字', '修改的名字')}');
   // writeFile('example.jpg', response.data.toString());
 }
 
