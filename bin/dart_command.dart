@@ -19,7 +19,7 @@ dynamic main(List<String> args) async {
   final type = args[0];
   if (type == 'build') {
     var shell = Shell();
-    await shell.run('Flutter pub get');
+    await shell.run('flutter pub get');
     // 解析参数
     if(args.length >= 2){
       await SpaceProcessor().buildRunnableSpace(args[1]);
