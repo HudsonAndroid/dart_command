@@ -35,7 +35,7 @@ class SpaceProcessor {
     var result = await dio.get('${ConstVar.BASE_URL}${appBuildGradle}');
 
     var modifyContent = result.toString();
-    if(packageName?.isEmpty == true){
+    if(packageName == null || packageName?.isEmpty == true){
       packageName = ConstVar.DEFAULT_PACKAGE_NAME;
       print('''
 ⚠️ Warning: the packageName param is null, use default packageName: ${packageName}.
@@ -43,7 +43,7 @@ If you want custom package name for the project, add '-p' param when you run 'pl
 Run 'plutter -h' to see more information.
       ''');
     }
-    if(appName?.isEmpty == true){
+    if(appName == null || appName?.isEmpty == true){
       appName = ConstVar.DEFAULT_APP_NAME;
       print('''
 ⚠️ Warning: the appName param is null, use default appName: ${appName}.
