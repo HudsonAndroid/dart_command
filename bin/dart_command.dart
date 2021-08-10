@@ -24,9 +24,11 @@ dynamic main(List<String> args) async {
     await SpaceProcessor().buildRunnableSpace(paramModel.appName, paramModel.packageName);
   }else if(type == 'clean') {
     // 清空工作空间
-    CleanProcessor().cleanSpace();
+    await CleanProcessor().cleanSpace();
   }else if(type == '-h' || type == '-help'){
     helper.printHelpDoc();
+  }else{
+    print('Could not find a named "$type" for "plutter"');
   }
 }
 
