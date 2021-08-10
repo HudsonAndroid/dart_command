@@ -62,7 +62,7 @@ class SpaceProcessor {
     print('==============config launcher images============');
     final launchBg = '.android/app/src/main/res/drawable/launch_background.xml';
     await dio.download('${ConstVar.BASE_URL}${launchBg}', launchBg);
-    final launchLogo = '.android/app/src/main/res/drawable-xxhdpi/launch_logo.png';
+    final launchLogo = '.android/app/src/main/res/drawable-xxhdpi/assistant_logo.png';
     await dio.download('${ConstVar.BASE_URL}${launchLogo}', launchLogo);
 
     // 6.修改生成的manifest
