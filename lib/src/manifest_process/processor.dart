@@ -14,8 +14,6 @@ class ManifestProcessor {
       final attributes = document.findAllElements('application').first.attributes;
       var hasModify = false;
       attributes.forEach((item) {
-        final name = item.name;
-        print('${name.prefix}  ${name.local}  ${name.qualified}  ${name.namespaceUri}');
         if(item.name.qualified == 'android:label'){
           item.value = ConstVar.MANIFEST_APP_NAME;
           hasModify = true;
