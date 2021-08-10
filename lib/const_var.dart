@@ -3,6 +3,10 @@ class ConstVar {
 
   static const String APP_NAME_PLACEHOLDER = '@{appName}';
 
+  static const String PACKAGE_NAME_PLACEHOLDER = '@{packageName}';
+
+  static const String DEFAULT_PACKAGE_NAME = 'com.example.plutter_demo';
+
   static const String DEFAULT_APP_ENTRY = 'lib/app/app.dart';
 
   static const String TARGET_APP_ENTRY = 'lib/plutter/app.dart';

@@ -20,9 +20,9 @@ dynamic main(List<String> args) async {
   if (type == 'build') {
     var shell = Shell();
     await shell.run('flutter pub get');
-    // 解析参数
-    if(args.length >= 2){
-      await SpaceProcessor().buildRunnableSpace(args[1]);
+    // 解析参数  args1 appName; args2 packageName
+    if(args.length >= 3){
+      await SpaceProcessor().buildRunnableSpace(args[1], args[2]);
     }else{
       print('参数不正确');
     }

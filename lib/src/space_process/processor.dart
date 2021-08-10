@@ -6,11 +6,11 @@ import 'package:dio/dio.dart';
 class SpaceProcessor {
   /// 构建可运行环境
   Future<bool> buildRunnableSpace(
-      String appName/*, String appEntryLocation*/) async {
+      String appName, String packageName/*, String appEntryLocation*/) async {
     try {
       final dio = Dio();
       // STEP1： 构建android环境目录
-      await _buildAndroidSpace(dio, appName);
+      await _buildAndroidSpace(dio, appName, packageName);
       // STEP2:  修改Flutter代码，使其可用
       await _buildFlutterSpace(dio/*, appEntryLocation*/);
     } on Exception catch (e) {
@@ -20,7 +20,7 @@ class SpaceProcessor {
     return true;
   }
 
-  Future<void> _buildAndroidSpace(Dio dio, String appName) async {
+  Future<void> _buildAndroidSpace(Dio dio, String appName, String packageName) async {
     // 1.下载并覆盖settings.gradle
     final settingGradle = '.android/settings.gradle';
     await dio.download('${ConstVar.BASE_URL}${settingGradle}', settingGradle);
@@ -30,13 +30,21 @@ class SpaceProcessor {
     var result = await dio.get('${ConstVar.BASE_URL}${appBuildGradle}');
 
     var modifyContent = result.toString();
+    if(packageName?.isEmpty == true){
+      packageName = ConstVar.DEFAULT_PACKAGE_NAME;
+    }
     if (appName?.isNotEmpty == true) {
       modifyContent =
-          modifyContent.replaceAll(ConstVar.APP_NAME_PLACEHOLDER, appName);
+          modifyContent
+            ..replaceAll(ConstVar.APP_NAME_PLACEHOLDER, appName)
+            ..replaceAll(ConstVar.PACKAGE_NAME_PLACEHOLDER, packageName);
     }
-    print('结果$modifyContent');
     var file = File(appBuildGradle);
     await file.writeAsString(modifyContent);
+
+    // 3.下载并覆盖settings_aar.gradle
+    final settingAarGradle = '.android/settings_aar.gradle';
+    await dio.download('${ConstVar.BASE_URL}${settingAarGradle}', settingAarGradle);
   }
 
   Future<void> _buildFlutterSpace(Dio dio/*, String appEntryLocation*/) async {
