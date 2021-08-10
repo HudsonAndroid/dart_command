@@ -10,8 +10,6 @@ class SpaceProcessor {
   Future<bool> buildRunnableSpace(
       String appName, String packageName/*, String appEntryLocation*/) async {
     try {
-      // 由于pub get后，.android文件生成没这么快，因此延迟800毫秒
-      await Future.delayed(Duration(milliseconds: 800));
       BuildEnvChecker().checkEnv();
       final dio = Dio();
       // STEP1： 构建android环境目录
