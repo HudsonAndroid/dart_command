@@ -37,9 +37,19 @@ class SpaceProcessor {
     var modifyContent = result.toString();
     if(packageName?.isEmpty == true){
       packageName = ConstVar.DEFAULT_PACKAGE_NAME;
+      print('''
+        Warning: the packageName param is null, use default packageName: ${packageName}.
+        If you want custom package name for the project, add '-p' param when you run 'plutter build'.
+        Run 'plutter -h' to see more information.
+      ''');
     }
     if(appName?.isEmpty == true){
       appName = ConstVar.DEFAULT_APP_NAME;
+      print('''
+        Warning: the appName param is null, use default appName: ${appName}.
+        If you want custom app name for the project, add '-n' param when you run 'plutter build'.
+        Run 'plutter -h' to see more information.
+      ''');
     }
     modifyContent =
         modifyContent
