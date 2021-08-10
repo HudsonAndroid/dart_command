@@ -38,17 +38,17 @@ class SpaceProcessor {
     if(packageName?.isEmpty == true){
       packageName = ConstVar.DEFAULT_PACKAGE_NAME;
       print('''
-        Warning: the packageName param is null, use default packageName: ${packageName}.
-        If you want custom package name for the project, add '-p' param when you run 'plutter build'.
-        Run 'plutter -h' to see more information.
+⚠️ Warning: the packageName param is null, use default packageName: ${packageName}.
+If you want custom package name for the project, add '-p' param when you run 'plutter build'.
+Run 'plutter -h' to see more information.
       ''');
     }
     if(appName?.isEmpty == true){
       appName = ConstVar.DEFAULT_APP_NAME;
       print('''
-        Warning: the appName param is null, use default appName: ${appName}.
-        If you want custom app name for the project, add '-n' param when you run 'plutter build'.
-        Run 'plutter -h' to see more information.
+⚠️ Warning: the appName param is null, use default appName: ${appName}.
+If you want custom app name for the project, add '-n' param when you run 'plutter build'.
+Run 'plutter -h' to see more information.
       ''');
     }
     modifyContent =
@@ -110,10 +110,11 @@ class SpaceProcessor {
 
     // 3.提示替换
     print('''
-      执行成功，现在你的工程中有新增一部分文件，你需要把${splashPath}启动页替换为你当前路由配置的启动页，
-      之后重新运行项目即可应用配置信息。
+    
+执行成功，现在你的工程中有新增一部分文件，你需要把${splashPath}启动页替换为你当前路由配置的启动页，
+之后重新运行项目即可应用配置信息。
       
-      去除生成的文件请执行plutter clean。
+去除生成的文件请执行plutter clean。
     ''');
   }
 }
