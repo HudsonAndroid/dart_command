@@ -25,10 +25,12 @@ class SpaceProcessor {
 
   Future<void> _buildAndroidSpace(Dio dio, String appName, String packageName) async {
     // 1.下载并覆盖settings.gradle
+    print('==============override settings.gradle============');
     final settingGradle = '.android/settings.gradle';
     await dio.download('${ConstVar.BASE_URL}${settingGradle}', settingGradle);
 
     // 2.下载、修改并覆盖app/build.gradle
+    print('==============override app/build.gradle============');
     final appBuildGradle = '.android/app/build.gradle';
     var result = await dio.get('${ConstVar.BASE_URL}${appBuildGradle}');
 
@@ -47,20 +49,24 @@ class SpaceProcessor {
     await file.writeAsString(modifyContent);
 
     // 3.下载并覆盖settings_aar.gradle
+    print('==============override settings_aar.gradle============');
     final settingAarGradle = '.android/settings_aar.gradle';
     await dio.download('${ConstVar.BASE_URL}${settingAarGradle}', settingAarGradle);
 
-    // 4.下载并覆盖build/gradle  [android目录下的]
+    // 4.下载并覆盖build.gradle  [android目录下的]
+    print('==============override build.gradle============');
     final buildGradle = '.android/build.gradle';
     await dio.download('${ConstVar.BASE_URL}${buildGradle}', buildGradle);
 
     // 5.配置启动页图片
+    print('==============config launcher images============');
     final launchBg = '.android/app/src/main/res/drawable/launch_background.xml';
     await dio.download('${ConstVar.BASE_URL}${launchBg}', launchBg);
     final launchLogo = '.android/app/src/main/res/drawable-xxhdpi/launch_logo.png';
     await dio.download('${ConstVar.BASE_URL}${launchLogo}', launchLogo);
 
     // 6.修改生成的manifest
+    print('==============modify manifest============');
     await ManifestProcessor().processManifest('.android/app/src/main/AndroidManifest.xml');
   }
 
@@ -88,6 +94,7 @@ class SpaceProcessor {
     // }
 
     // 2.复制splash页面，并提示使用者更换splash页面
+    print('==============write PlutterSplashPage.dart============');
     final splashPath = ConstVar.SPLASH_PATH;
     await dio.download('${ConstVar.BASE_URL}${splashPath}', splashPath);
 
