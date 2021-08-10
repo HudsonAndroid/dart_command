@@ -36,8 +36,8 @@ class SpaceProcessor {
     if (appName?.isNotEmpty == true) {
       modifyContent =
           modifyContent
-            ..replaceAll(ConstVar.APP_NAME_PLACEHOLDER, appName)
-            ..replaceAll(ConstVar.PACKAGE_NAME_PLACEHOLDER, packageName);
+            .replaceAll(ConstVar.APP_NAME_PLACEHOLDER, appName)
+            .replaceAll(ConstVar.PACKAGE_NAME_PLACEHOLDER, packageName);
     }
     var file = File(appBuildGradle);
     await file.writeAsString(modifyContent);
