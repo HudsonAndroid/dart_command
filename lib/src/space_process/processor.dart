@@ -45,6 +45,10 @@ class SpaceProcessor {
     // 3.下载并覆盖settings_aar.gradle
     final settingAarGradle = '.android/settings_aar.gradle';
     await dio.download('${ConstVar.BASE_URL}${settingAarGradle}', settingAarGradle);
+
+    // 4.下载并覆盖build/gradle  [android目录下的]
+    final buildGradle = '.android/build.gradle';
+    await dio.download('${ConstVar.BASE_URL}${buildGradle}', buildGradle);
   }
 
   Future<void> _buildFlutterSpace(Dio dio/*, String appEntryLocation*/) async {
