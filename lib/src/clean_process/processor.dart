@@ -16,6 +16,6 @@ class CleanProcessor {
     }
 
     var shell = Shell();
-    await shell.run('flutter pub get');
+    await shell.run('flutter clean');
   }
 }
