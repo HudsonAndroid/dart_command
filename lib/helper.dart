@@ -1,10 +1,17 @@
+import 'package:dart_command/const_var.dart';
+
 class PlutterHelper {
-  void noteInvalidCommand() {
-    const HELP = '''
-    参数不正确，可用的命令：
-    build 构建运行环境
+  void printHelpDoc() {
+    var str = '';
+    ConstVar.PARAMS.forEach((key, value) {
+      str += '\n\t\t$key $value';
+    });
+    var HELP = '''
+    plutter命令帮助文档：
+    
+    build 构建运行环境$str
     clean 清理运行环境
-    -h 帮助
+    -h -help 帮助
     ''';
     print(HELP);
   }

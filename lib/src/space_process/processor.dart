@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:dart_command/const_var.dart';
+import 'package:dart_command/src/build_checker/build_env_checker.dart';
+import 'package:dart_command/src/manifest_process/processor.dart';
 import 'package:dio/dio.dart';
 
 class SpaceProcessor {
@@ -8,6 +10,7 @@ class SpaceProcessor {
   Future<bool> buildRunnableSpace(
       String appName, String packageName/*, String appEntryLocation*/) async {
     try {
+      BuildEnvChecker().checkEnv();
       final dio = Dio();
       // STEP1： 构建android环境目录
       await _buildAndroidSpace(dio, appName, packageName);
@@ -33,12 +36,13 @@ class SpaceProcessor {
     if(packageName?.isEmpty == true){
       packageName = ConstVar.DEFAULT_PACKAGE_NAME;
     }
-    if (appName?.isNotEmpty == true) {
-      modifyContent =
-          modifyContent
+    if(appName?.isEmpty == true){
+      appName = ConstVar.DEFAULT_APP_NAME;
+    }
+    modifyContent =
+        modifyContent
             .replaceAll(ConstVar.APP_NAME_PLACEHOLDER, appName)
             .replaceAll(ConstVar.PACKAGE_NAME_PLACEHOLDER, packageName);
-    }
     var file = File(appBuildGradle);
     await file.writeAsString(modifyContent);
 
@@ -49,6 +53,15 @@ class SpaceProcessor {
     // 4.下载并覆盖build/gradle  [android目录下的]
     final buildGradle = '.android/build.gradle';
     await dio.download('${ConstVar.BASE_URL}${buildGradle}', buildGradle);
+
+    // 5.配置启动页图片
+    final launchBg = '.android/app/src/main/res/drawable/launch_background.xml';
+    await dio.download('${ConstVar.BASE_URL}${launchBg}', launchBg);
+    final launchLogo = '.android/app/src/main/res/drawable-xxhdpi/launch_logo.png';
+    await dio.download('${ConstVar.BASE_URL}${launchLogo}', launchLogo);
+
+    // 6.修改生成的manifest
+    await ManifestProcessor().processManifest('.android/app/src/main/AndroidManifest.xml');
   }
 
   Future<void> _buildFlutterSpace(Dio dio/*, String appEntryLocation*/) async {

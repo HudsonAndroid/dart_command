@@ -2,42 +2,32 @@ import 'dart:io';
 
 import 'package:dart_command/const_var.dart';
 import 'package:dart_command/helper.dart';
+import 'package:dart_command/src/clean_process/processor.dart';
+import 'package:dart_command/src/param_docoder/decoder.dart';
 import 'package:dart_command/src/space_process/processor.dart';
 import 'package:dio/dio.dart';
 import 'package:process_run/shell.dart';
 
 dynamic main(List<String> args) async {
+  final helper = PlutterHelper();
   if (args.isEmpty) {
-    PlutterHelper().noteInvalidCommand();
+    helper.printHelpDoc();
     return;
   }
-  args?.forEach((element) {
-    print('内容${element}');
-  });
-
 
   final type = args[0];
   if (type == 'build') {
     var shell = Shell();
     await shell.run('flutter pub get');
     // 解析参数  args1 appName; args2 packageName
-    if(args.length >= 3){
-      await SpaceProcessor().buildRunnableSpace(args[1], args[2]);
-    }else{
-      print('参数不正确');
-    }
+    final paramModel = ParamDecoder().decode(args);
+    await SpaceProcessor().buildRunnableSpace(paramModel.appName, paramModel.packageName);
   }else if(type == 'clean') {
     // 清空工作空间
+    CleanProcessor().cleanSpace();
+  }else if(type == '-h' || type == '-help'){
+    helper.printHelpDoc();
   }
-
-  // var shell = Shell();
-  // await shell.run('pwd');
-  // // shell.run('flutter pub get');
-  //
-  // // moveFile(File('http://git.pupuvip.com:8005/frontend/flutter_plugins/plutter_scaffold/-/blob/master/android/app/build.gradle'), 'bin/build.gradle');
-  // // writeFile();
-  //
-  // await downloadFile();
 }
 
 /// 获取Plutter原始所在路径，以备后面复制文件使用
