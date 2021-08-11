@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dart_command/const_var.dart';
 import 'package:dart_command/helper.dart';
+import 'package:dart_command/src/build_checker/build_checker.dart';
 import 'package:dart_command/src/clean_process/processor.dart';
 import 'package:dart_command/src/param_docoder/decoder.dart';
 import 'package:dart_command/src/space_process/processor.dart';
@@ -17,12 +18,14 @@ dynamic main(List<String> args) async {
 
   final type = args[0];
   if (type == 'build') {
+    BuildChecker.flutterProjectCheck();
     var shell = Shell();
     await shell.run('flutter pub get');
     // 解析参数  args1 appName; args2 packageName
     final paramModel = ParamDecoder().decode(args);
     await SpaceProcessor().buildRunnableSpace(paramModel.appName, paramModel.packageName);
   }else if(type == 'clean') {
+    BuildChecker.flutterProjectCheck();
     // 清空工作空间
     await CleanProcessor().cleanSpace();
   }else if(type == '-h' || type == '-help'){
@@ -30,6 +33,12 @@ dynamic main(List<String> args) async {
   }else{
     print('Could not find a command named "$type" for "plutter"');
   }
+}
+
+/// 包名比对正则表达式
+void checkRegex(String input) {
+  final regExp = RegExp('^([a-zA-Z_][a-zA-Z0-9_]*)+([.][a-zA-Z_][a-zA-Z0-9_]*)+\$', caseSensitive: false, multiLine: false);
+  print('valid package: ${regExp.stringMatch(input) == input}');
 }
 
 /// 获取Plutter原始所在路径，以备后面复制文件使用

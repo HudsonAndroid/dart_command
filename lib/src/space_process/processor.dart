@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_command/const_var.dart';
-import 'package:dart_command/src/build_checker/build_env_checker.dart';
+import 'package:dart_command/src/build_checker/build_checker.dart';
 import 'package:dart_command/src/manifest_process/processor.dart';
 import 'package:dio/dio.dart';
 
@@ -10,7 +10,7 @@ class SpaceProcessor {
   Future<bool> buildRunnableSpace(
       String appName, String packageName/*, String appEntryLocation*/) async {
     try {
-      BuildEnvChecker().checkEnv();
+      BuildChecker.dirCheck();
       final dio = Dio();
       // STEP1： 构建android环境目录
       await _buildAndroidSpace(dio, appName, packageName);
@@ -39,15 +39,20 @@ class SpaceProcessor {
       packageName = ConstVar.DEFAULT_PACKAGE_NAME;
       print('''
 ⚠️ Warning: the packageName param is null, use default packageName: ${packageName}.
-If you want custom package name for the project, add '-p' param when you run 'plutter build'.
+If you want to customize package name for the project, add '-p' param when you run 'plutter build'.
 Run 'plutter -h' to see more information.
       ''');
+    }else{
+      // 检查包名是否符合要求
+      if(!BuildChecker.isValidPackageName(packageName)){
+        throw Exception('The package name you input is invalid, please check it. Input content: $packageName');
+      }
     }
     if(appName == null || appName?.isEmpty == true){
       appName = ConstVar.DEFAULT_APP_NAME;
       print('''
 ⚠️ Warning: the appName param is null, use default appName: ${appName}.
-If you want custom app name for the project, add '-n' param when you run 'plutter build'.
+If you want to customize app name for the project, add '-n' param when you run 'plutter build'.
 Run 'plutter -h' to see more information.
       ''');
     }
@@ -78,6 +83,11 @@ Run 'plutter -h' to see more information.
     // 6.修改生成的manifest
     print('==============modify manifest============');
     await ManifestProcessor().processManifest('.android/app/src/main/AndroidManifest.xml');
+
+    // 7.下载并覆盖app/proguard-rules.pro （由于app/build.gradle的release等环境需要使用）
+    print('==============override proguard-rules.pro============');
+    final proguardRule = '.android/app/proguard-rules.pro';
+    await dio.download('${ConstVar.BASE_URL}${proguardRule}', proguardRule);
   }
 
   Future<void> _buildFlutterSpace(Dio dio/*, String appEntryLocation*/) async {
@@ -113,6 +123,8 @@ Run 'plutter -h' to see more information.
     
 执行成功，现在你的工程中有新增一部分文件，你需要把${splashPath}启动页替换为你当前路由配置的启动页，
 之后重新运行项目即可应用配置信息。
+
+注意：在你修改pubspec.yaml文件之后，.android内容会被Flutter修改并覆盖，因此最好重新执行plutter build指令。
       
 去除生成的文件请执行plutter clean。
     ''');

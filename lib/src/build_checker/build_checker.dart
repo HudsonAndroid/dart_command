@@ -1,20 +1,15 @@
 
 import 'dart:io';
 
-class BuildEnvChecker {
+class BuildChecker {
 
-  void checkEnv() {
-    _flutterProjectCheck();
-    _dirCheck();
-  }
-
-  void _flutterProjectCheck() {
+  static void flutterProjectCheck() {
     if(!File('pubspec.yaml').existsSync()){
       throw Exception('Cannot find pubspec.yaml, are you sure run this command in flutter project?');
     }
   }
 
-  void _dirCheck() {
+  static void dirCheck() {
     // .android 目录必须存在
     if(!Directory('.android').existsSync()){
       throw Exception("Cannot find .android directory, check if the command 'flutter pub get' run ok or not.");
@@ -34,5 +29,12 @@ class BuildEnvChecker {
     if(!appDir.existsSync()){
       appDir.createSync(recursive: true);
     }
+  }
+
+  static bool isValidPackageName(String input) {
+    if(input == null || input.isEmpty == true) return false;
+    final regExp = RegExp('^([a-zA-Z_][a-zA-Z0-9_]*)+([.][a-zA-Z_][a-zA-Z0-9_]*)+\$',
+        caseSensitive: false, multiLine: false);
+    return regExp.stringMatch(input) == input;
   }
 }
